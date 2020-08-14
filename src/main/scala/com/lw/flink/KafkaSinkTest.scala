@@ -27,7 +27,7 @@ object KafkaSinkTest {
     kafka_input_stream.print("kafka_input_stream").setParallelism(1)
 
 
-    val dataStream = kafka_input_stream.map((data: String) =>{
+    val dataStream: DataStream[String] = kafka_input_stream.map((data: String) =>{
       val dataArray = data.split(",")
       SensorReading(dataArray(0).trim, dataArray(1).trim.toLong, dataArray(2).trim.toDouble).toString
     })
