@@ -17,7 +17,7 @@ object RedisSinkTest {
     val inputStream = env.readTextFile("/Users/xyj/developer/idea_prj/flink-helloworld/src/main/sources/sensor.txt")
 
     val dataStream: DataStream[SensorReading] = inputStream.map((data: String) => {
-      val dataArray = data.split(",")
+      val dataArray: Array[String] = data.split(",")
       SensorReading(dataArray(0).trim, dataArray(1).trim.toLong, dataArray(2).trim.toDouble)
     })
 
@@ -29,9 +29,9 @@ object RedisSinkTest {
     dataStream.addSink(new RedisSink[SensorReading](conf, new MyRedisMapper))
 
 
-    dataStream.print("kafka_sink_topic_output------>")
+    dataStream.print("redis_sink_topic_output------>")
 
-    env.execute("kafka sink test")
+    env.execute("redis sink test")
 
   }
 
