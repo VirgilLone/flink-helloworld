@@ -1,0 +1,5 @@
+hello guys
+hello flink
+what is stream
+flink is faster than spark
+ok? guys
