@@ -36,7 +36,7 @@ object RedisSinkTest {
   }
 
 }
-
+// 定义保存到 redis 时调用的命令：
 class MyRedisMapper extends RedisMapper[SensorReading]{
   override def getCommandDescription: RedisCommandDescription = {
     new RedisCommandDescription(RedisCommand.HSET, "sensor_temperature")
