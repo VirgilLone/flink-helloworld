@@ -2,7 +2,9 @@ package com.lw.flink
 
 import java.util.{Properties, Random}
 
-import org.apache.flink.api.common.serialization.SimpleStringSchema
+import org.apache.flink.api.common.serialization.{SimpleStringEncoder, SimpleStringSchema}
+import org.apache.flink.core.fs.Path
+import org.apache.flink.streaming.api.functions.sink.filesystem.StreamingFileSink
 import org.apache.flink.streaming.api.functions.source.SourceFunction
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer011
@@ -28,9 +30,14 @@ object SourceTest {
     listStream.print("listStream").setParallelism(1)*/
 
 
-    /*// 文件读取数据
-    val txtStream = env.readTextFile("/Users/xyj/developer/idea_prj/scalatest/src/main/sources/sensor.txt")
-    txtStream.print("txtStream").setParallelism(1)*/
+    /*// 从文件读取数据
+    val txtStream = env.readTextFile("/Users/xyj/developer/idea_prj/flink-helloworld/src/main/sources/sensor.txt")
+    txtStream.print("txtStream").setParallelism(1)
+    // sink 到文件
+    txtStream.addSink(StreamingFileSink.forRowFormat(
+      new Path("/Users/xyj/developer/idea_prj/flink-helloworld/src/main/sources/out.txt"),
+      new SimpleStringEncoder[String]("UTF-8")
+    ).build())*/
 
 
     /*// kafka中读取
