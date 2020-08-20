@@ -48,6 +48,7 @@ class MyJDBCSink2() extends RichSinkFunction[SensorReading]{
 
   }
 
+  // 每来一条数据进行处理的生命周期
   override def invoke(value: SensorReading, context: SinkFunction.Context[_]): Unit = {
 //    super.invoke(value, context)
     updateStmt.setDouble(1, value.temperature)

@@ -7,7 +7,7 @@ object WorldCount_flink {
     val env = ExecutionEnvironment.getExecutionEnvironment
 
     val inputPath = "/Users/xyj/developer/idea_prj/flink-helloworld/src/main/sources/wc.txt"
-    val inputDataSet = env.readTextFile(inputPath)
+    val inputDataSet: DataSet[String] = env.readTextFile(inputPath)
 
     val wcDataSet = inputDataSet.flatMap(_.split(" "))
       .map( (_,1) )
