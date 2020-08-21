@@ -23,7 +23,7 @@ object SideOutputTest {
       //      .assignAscendingTimestamps(_.timestamp*1000)
       // 延迟1s上涨水位
       .assignTimestampsAndWatermarks(new BoundedOutOfOrdernessTimestampExtractor[SensorReading](Time.seconds(1)) {
-        override def extractTimestamp(t: SensorReading) = t.timestamp * 1000
+        override def extractTimestamp(t: SensorReading) = t.timestamp * 1000L
       })
 
     val processStream = dataStream.process(new FreezingMonitor())
