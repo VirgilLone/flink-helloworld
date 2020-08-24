@@ -120,7 +120,7 @@ class TempIncreAlert extends KeyedProcessFunction[String, SensorReading, String]
 
     val curTimerTs = currentTimer.value()
     if (i.temperature < prevTemp || prevTemp == 0.0) {
-      // 温度下降或者是第一个温度值，删除定时器
+      // 温度下降或者是第一个温度值来，删除定时器
       context.timerService().deleteProcessingTimeTimer(curTimerTs)
       // 清空状态变量
       currentTimer.clear()
