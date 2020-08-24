@@ -83,6 +83,7 @@ class TempChangeAlert(threshold: Double) extends KeyedProcessFunction[String, Se
 
 }
 // 使用富函数类，使map这类带状态
+// RichFunction有生命周期方法，可以获取运行时上下文，进行状态编程，但是不能获取时间戳和watermark相关的信息
 class TempChangeAlert2(threshold: Double) extends RichFlatMapFunction[SensorReading, (String, Double, Double)] {
   var lastTempState: ValueState[Double] = _
 
