@@ -57,7 +57,7 @@ object ProcessFunctionTest {
       }
 
     dataStream.print("data stream ")
-    processedStream2.print("process stream")
+    processedStream.print("process stream")
 
 
     env.execute("ProcessFunction test")
@@ -135,6 +135,7 @@ class TempIncreAlert extends KeyedProcessFunction[String, SensorReading, String]
   override def onTimer(timestamp: Long, ctx: KeyedProcessFunction[String, SensorReading, String]#OnTimerContext, out: Collector[String]): Unit = {
     //    super.onTimer(timestamp, ctx, out)
     out.collect("警报警报！" + ctx.getCurrentKey + "温度连续上升！")
+    // 此5秒的定时器报警完了之后需要清空
     currentTimer.clear()
 
   }
