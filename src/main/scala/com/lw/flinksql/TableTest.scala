@@ -15,9 +15,9 @@ object TableTest {
     env.setParallelism(1)
 
 
-//    val inputStream = env.socketTextStream("localhost", 7777)
+    val inputStream = env.socketTextStream("localhost", 7777)
     val inputPath = "/Users/xyj/developer/idea_prj/flink-helloworld/src/main/sources/sensor.txt"
-    val inputStream: DataStream[String] = env.readTextFile(inputPath)
+//    val inputStream: DataStream[String] = env.readTextFile(inputPath)
 
     val dataStream = inputStream.map((e: String) => {
       val dataArray = e.split(",")
@@ -49,15 +49,6 @@ object TableTest {
       .build()
     val bbTableEnv = StreamTableEnvironment.create(env,bbSettings)
 
-
-
-//    val settings = EnvironmentSettings.newInstance()
-//      .useBlinkPlanner()
-//      .inStreamingMode()
-//      .build()
-
-    // 创建表执行环境
-//    val tableEnv: StreamTableEnvironment = StreamTableEnvironment.create(env)
 
     // 基于tableEnv，流转化为Table
     val dataTable: Table = bsTableEnv.fromDataStream(dataStream)
