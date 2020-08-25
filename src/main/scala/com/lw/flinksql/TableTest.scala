@@ -15,9 +15,9 @@ object TableTest {
     env.setParallelism(1)
 
 
-    val inputStream = env.socketTextStream("localhost", 7777)
+//    val inputStream = env.socketTextStream("localhost", 7777)
     val inputPath = "/Users/xyj/developer/idea_prj/flink-helloworld/src/main/sources/sensor.txt"
-//    val inputStream: DataStream[String] = env.readTextFile(inputPath)
+    val inputStream: DataStream[String] = env.readTextFile(inputPath)
 
     val dataStream = inputStream.map((e: String) => {
       val dataArray = e.split(",")
@@ -52,6 +52,7 @@ object TableTest {
 
     // 基于tableEnv，流转化为Table
     val dataTable: Table = bsTableEnv.fromDataStream(dataStream)
+    bsTableEnv.registerTable("dataTable",dataTable)
 
     // 使用Table api
 //    val resultSqlTable: Table = dataTable
@@ -59,7 +60,8 @@ object TableTest {
 //      .filter("id == 'sensor_7' ")
 
     // 或者使用flinksql 直接写sql
-    val resultSqlTable = bsTableEnv.sqlQuery("select id,temperature from "+ dataTable+" where id='sensor_7'  ")
+    val resultSqlTable = bsTableEnv.sqlQuery("select id,temperature from dataTable where id='sensor_7'  ")
+//    val resultSqlTable = bsTableEnv.sqlQuery("select id,temperature from "+ dataTable+" where id='sensor_7'  ")
 
     resultSqlTable.toAppendStream[(String, Double)].print("table api")
 
