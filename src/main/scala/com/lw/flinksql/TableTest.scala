@@ -6,7 +6,9 @@ import org.apache.flink.streaming.api.scala._
 import org.apache.flink.table.api.{EnvironmentSettings, Table}
 import org.apache.flink.table.api.scala._
 
-
+/**
+ * DataStream流转化为表
+ */
 object TableTest {
 
   def main(args: Array[String]): Unit = {
@@ -51,7 +53,8 @@ object TableTest {
 
 
     // 基于tableEnv，流转化为Table
-    val dataTable: Table = bsTableEnv.fromDataStream(dataStream)
+    val dataTable: Table = bsTableEnv.fromDataStream(dataStream,
+      'timestamp as 'ts,'id as 'id,'temperature)
     bsTableEnv.registerTable("dataTable",dataTable)
 
     // 使用Table api
@@ -60,10 +63,10 @@ object TableTest {
 //      .filter("id == 'sensor_7' ")
 
     // 或者使用flinksql 直接写sql
-    val resultSqlTable = bsTableEnv.sqlQuery("select id,temperature from dataTable where id='sensor_7'  ")
+    val resultSqlTable = bsTableEnv.sqlQuery("select ts,id,temperature from dataTable where id='sensor_7'  ")
 //    val resultSqlTable = bsTableEnv.sqlQuery("select id,temperature from "+ dataTable+" where id='sensor_7'  ")
 
-    resultSqlTable.toAppendStream[(String, Double)].print("table api")
+    resultSqlTable.toAppendStream[(Long,String, Double)].print("table api")
 
     env.execute("table test")
 
