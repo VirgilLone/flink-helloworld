@@ -52,10 +52,15 @@ object TableTest {
     val bbTableEnv = StreamTableEnvironment.create(env,bbSettings)
 
 
-    // 基于tableEnv，流转化为Table
+    // 基于tableEnv，流转化为Table，但是Table还不能直接在sql里使用必须要注册临时表
     val dataTable: Table = bsTableEnv.fromDataStream(dataStream,
       'timestamp as 'ts,'id as 'id,'temperature)
-    bsTableEnv.registerTable("dataTable",dataTable)
+//    bsTableEnv.registerTable("dataTable",dataTable)
+//    bsTableEnv.createTemporaryView("dataTable",dataTable)
+
+    // 可以直接把流注册为临时表供flinksql使用，少了中间的Table数据结构
+    bsTableEnv.createTemporaryView("dataTable",dataStream,
+      'timestamp as 'ts,'id as 'id,'temperature)
 
     // 使用Table api
 //    val resultSqlTable: Table = dataTable
