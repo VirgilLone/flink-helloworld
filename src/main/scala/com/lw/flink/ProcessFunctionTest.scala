@@ -125,13 +125,14 @@ class TempIncreAlert extends KeyedProcessFunction[String, SensorReading, String]
       // 清空状态变量
       currentTimer.clear()
     } else if (i.temperature > prevTemp && curTimerTs == 0) {
-      // 温度上升且我们并没有设置定时器，就注册一个定时器，等5秒钟后触发，看这5秒内的数据
+      // 温度上升且我们并没有设置定时器(如果此时已经有定时器的话什么都不做，等待定时器触发报警，此时触发暗含来的数据都是温度上升的)，就注册一个定时器，等5秒钟后触发
       val timerTs = context.timerService().currentProcessingTime() + 5000
       context.timerService().registerProcessingTimeTimer(timerTs)
       currentTimer.update(timerTs)
     }
   }
 
+  // 能触发定时器，则说明这5秒内温度都是上升(因为下降会删除该定时器)，则可以报警(实际生产中不一定，可能只来了一条上升数据，没有达到"持续上升")
   override def onTimer(timestamp: Long, ctx: KeyedProcessFunction[String, SensorReading, String]#OnTimerContext, out: Collector[String]): Unit = {
     //    super.onTimer(timestamp, ctx, out)
     out.collect("警报警报！" + ctx.getCurrentKey + "温度连续上升！")
